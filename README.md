@@ -37,3 +37,12 @@ La aplicación se comunica con una **API REST**, realizando solicitudes HTTP par
 ---
 
 ## 📂 Estructura del proyecto
+
+src/
+├── app/
+│ ├── components/
+│ ├── services/
+│ ├── models/
+│ └── pages/
+├── environments/
+└── main.ts
