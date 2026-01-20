@@ -46,3 +46,33 @@ src/
 │ └── pages/
 ├── environments/
 └── main.ts
+
+---
+
+Enfoque aplicado:
+
+Análisis de requerimientos y posibles soluciones técnicas
+
+Evaluación de estructuras de código y patrones de diseño
+
+Comparación de enfoques arquitectónicos antes de su implementación
+
+Identificación de mejoras en rendimiento, mantenibilidad y escalabilidad
+
+Apoyo en la comprensión de documentación técnica y estándares
+
+---
+
+Pensamiento analítico y criterio técnico:
+
+Cada decisión de diseño, estructura o implementación parte de:
+
+Análisis propio del problema
+
+Comprensión del contexto del sistema
+
+Evaluación de impacto a corto y largo plazo
+
+Aplicación de buenas prácticas de desarrollo
+
+La IA se utiliza como herramienta de consulta, similar a documentación avanzada o revisión técnica, pero las decisiones finales son siempre humanas y fundamentadas.
