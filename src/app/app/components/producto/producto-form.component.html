@@ -1,0 +1,147 @@
+<div class="form-container">
+  <!-- Header -->
+  <div class="form-header">
+    <div class="header-content">
+      <button class="btn-back" (click)="volver()">
+        <i class="icon-back">←</i>
+      </button>
+      <div>
+        <h1 class="titulo">{{ esEdicion ? 'Editar Producto' : 'Nuevo Producto' }}</h1>
+        <p class="subtitulo">{{ esEdicion ? 'Actualiza la información del producto' : 'Completa los datos del nuevo producto' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div class="alert alert-error" *ngIf="mensajeError">
+    <span class="alert-icon">⚠️</span>
+    {{ mensajeError }}
+  </div>
+
+  <!-- Mensaje de éxito -->
+  <div class="alert alert-success" *ngIf="mensajeExito">
+    <span class="alert-icon">✓</span>
+    {{ mensajeExito }}
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-overlay" *ngIf="cargando">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()" class="form-card">
+    <div class="form-section">
+      <h3 class="section-title">Información del Producto</h3>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="codigo" class="form-label">
+            Código <span class="required">*</span>
+          </label>
+          <input
+            id="codigo"
+            type="text"
+            formControlName="codigo"
+            class="form-input"
+            [class.input-error]="codigo?.invalid && (codigo?.dirty || codigo?.touched)"
+            placeholder="Ej: PROD-001"
+          >
+          <div class="error-message" *ngIf="codigo?.invalid && (codigo?.dirty || codigo?.touched)">
+            <span *ngIf="codigo?.errors?.['required']">El código es requerido</span>
+            <span *ngIf="codigo?.errors?.['pattern']">Use solo letras mayúsculas, números y guiones</span>
+            <span *ngIf="codigo?.errors?.['minlength']">El código debe tener al menos 3 caracteres</span>
+            <span *ngIf="codigo?.errors?.['maxlength']">El código no debe exceder 20 caracteres</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre" class="form-label">
+            Nombre del Producto <span class="required">*</span>
+          </label>
+          <input
+            id="nombre"
+            type="text"
+            formControlName="nombre"
+            class="form-input"
+            [class.input-error]="nombre?.invalid && (nombre?.dirty || nombre?.touched)"
+            placeholder="Ingrese el nombre del producto"
+          >
+          <div class="error-message" *ngIf="nombre?.invalid && (nombre?.dirty || nombre?.touched)">
+            <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
+            <span *ngIf="nombre?.errors?.['minlength']">El nombre debe tener al menos 3 caracteres</span>
+            <span *ngIf="nombre?.errors?.['maxlength']">El nombre no debe exceder 100 caracteres</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="precio" class="form-label">
+            Precio (₡) <span class="required">*</span>
+          </label>
+          <input
+            id="precio"
+            type="number"
+            step="0.01"
+            formControlName="precio"
+            class="form-input"
+            [class.input-error]="precio?.invalid && (precio?.dirty || precio?.touched)"
+            placeholder="0.00"
+          >
+          <div class="error-message" *ngIf="precio?.invalid && (precio?.dirty || precio?.touched)">
+            <span *ngIf="precio?.errors?.['required']">El precio es requerido</span>
+            <span *ngIf="precio?.errors?.['min']">El precio debe ser mayor a 0</span>
+            <span *ngIf="precio?.errors?.['pattern']">Ingrese un precio válido (máximo 2 decimales)</span>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="!esEdicion">
+          <label for="cantidadInicial" class="form-label">
+            Cantidad Inicial <span class="required">*</span>
+          </label>
+          <input
+            id="cantidadInicial"
+            type="number"
+            formControlName="cantidadInicial"
+            class="form-input"
+            [class.input-error]="cantidadInicial?.invalid && (cantidadInicial?.dirty || cantidadInicial?.touched)"
+            placeholder="0"
+          >
+          <div class="error-message" *ngIf="cantidadInicial?.invalid && (cantidadInicial?.dirty || cantidadInicial?.touched)">
+            <span *ngIf="cantidadInicial?.errors?.['required']">La cantidad inicial es requerida</span>
+            <span *ngIf="cantidadInicial?.errors?.['min']">La cantidad debe ser al menos 0</span>
+            <span *ngIf="cantidadInicial?.errors?.['pattern']">Ingrese solo números enteros</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              formControlName="aplicaIVA"
+              class="checkbox-input"
+            >
+            <span class="checkbox-text">Aplica IVA (13%)</span>
+          </label>
+          <p class="checkbox-help">
+            Marque esta opción si el producto está sujeto al Impuesto sobre el Valor Agregado
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <button type="button" class="btn-cancelar" (click)="volver()" [disabled]="cargando">
+        Cancelar
+      </button>
+      <button type="submit" class="btn-guardar" [disabled]="productoForm.invalid || cargando">
+        <span *ngIf="!cargando">{{ esEdicion ? 'Actualizar Producto' : 'Guardar Producto' }}</span>
+        <span *ngIf="cargando">Guardando...</span>
+      </button>
+    </div>
+  </form>
+</div>

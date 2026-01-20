@@ -1,0 +1,136 @@
+<div class="dashboard-container">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <div class="welcome-section">
+      <h1 class="welcome-title">{{ getGreeting() }}</h1>
+      <p class="welcome-subtitle">{{ currentTime }}</p>
+    </div>
+  </div>
+
+  <!-- Stats Cards Grid -->
+  <div class="stats-grid">
+    <mat-card 
+      *ngFor="let card of statCards" 
+      class="stat-card"
+      (click)="navigateTo(card.route)"
+      [class.clickable]="card.route">
+      <div class="stat-card-content">
+        <div class="stat-icon-container" [style.background-color]="card.color + '20'">
+          <mat-icon [style.color]="card.color" class="stat-icon">{{ card.icon }}</mat-icon>
+        </div>
+        <div class="stat-details">
+          <p class="stat-title">{{ card.title }}</p>
+          <h2 class="stat-value">{{ card.value }}</h2>
+          <div class="stat-trend" *ngIf="card.trend">
+            <mat-icon class="trend-icon" [style.color]="card.color">{{ card.trendIcon }}</mat-icon>
+            <span class="trend-text" [style.color]="card.color">{{ card.trend }}</span>
+            <span class="trend-label">vs. ayer</span>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Chart Section -->
+    <mat-card class="chart-card">
+      <mat-card-header class="card-header">
+        <mat-card-title class="card-title">
+          <mat-icon class="title-icon">show_chart</mat-icon>
+          Ventas de la Semana
+        </mat-card-title>
+        <button mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content class="chart-content">
+        <div class="chart-container">
+          <div class="chart-bars">
+            <div class="bar-group" *ngFor="let day of weeklyData">
+              <div class="bar-wrapper">
+                <div class="bar" [style.height]="day.percentage + '%'" [style.background-color]="day.color">
+                  <span class="bar-value">{{ day.value }}</span>
+                </div>
+              </div>
+              <span class="bar-label">{{ day.day }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Top Products -->
+    <mat-card class="products-card">
+      <mat-card-header class="card-header">
+        <mat-card-title class="card-title">
+          <mat-icon class="title-icon">trending_up</mat-icon>
+          Productos Más Vendidos
+        </mat-card-title>
+        <button mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content class="products-content">
+        <div class="product-item" *ngFor="let product of topProducts; let i = index">
+          <div class="product-rank">
+            <span class="rank-number" [class.top-rank]="i === 0">#{{ i + 1 }}</span>
+          </div>
+          <div class="product-info">
+            <h4 class="product-name">{{ product.name }}</h4>
+            <p class="product-sales">{{ product.sales }} ventas</p>
+          </div>
+          <div class="product-revenue">
+            <span class="revenue-amount">{{ product.revenue }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Recent Activity Section -->
+  <mat-card class="activity-card">
+    <mat-card-header class="card-header">
+      <mat-card-title class="card-title">
+        <mat-icon class="title-icon">history</mat-icon>
+        Actividad Reciente
+      </mat-card-title>
+      <!-- <button mat-button color="primary" class="view-all-btn">
+        Ver todo
+        <mat-icon>arrow_forward</mat-icon>
+      </button> -->
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="activity-content">
+      <div class="activity-timeline">
+        <div class="activity-item" *ngFor="let activity of recentActivities">
+          <div class="activity-icon-wrapper" [style.background-color]="activity.color + '20'">
+            <mat-icon [style.color]="activity.color" class="activity-icon">{{ activity.icon }}</mat-icon>
+          </div>
+          <div class="activity-details">
+            <p class="activity-description">{{ activity.description }}</p>
+            <span class="activity-time">{{ activity.time }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <button mat-fab extended color="primary" class="action-btn" (click)="navigateTo('/facturas')">
+      <mat-icon>add</mat-icon>
+      Nueva Factura
+    </button>
+    <button mat-fab extended class="action-btn secondary" (click)="navigateTo('/producto/nuevo')">
+      <mat-icon>inventory_2</mat-icon>
+      Agregar Producto
+    </button>
+    <button mat-fab extended class="action-btn tertiary" (click)="navigateTo('/clientes/nuevo')">
+      <mat-icon>person_add</mat-icon>
+      Nuevo Cliente
+    </button>
+  </div>
+</div>

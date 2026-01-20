@@ -1,0 +1,250 @@
+<div class="container">
+  <div class="header">
+    <div class="header-content">
+      <h1 class="title">Nueva Factura</h1>
+      <p class="subtitle">Crea una nueva factura seleccionando cliente y productos</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-secondary" (click)="cancelar()" [disabled]="guardando">
+        Cancelar
+      </button>
+      <button class="btn-primary" (click)="guardarFactura()" [disabled]="guardando || detalles.length === 0">
+        {{ guardando ? 'Guardando...' : 'Guardar Factura' }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <span class="error-icon">⚠️</span>
+    {{ error }}
+  </div>
+
+  <div class="content-grid">
+    <!-- Sección de Cliente -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">👤 Cliente</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label>Buscar Cliente (Opcional)</label>
+          <div class="search-container">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar por nombre, cédula o correo..."
+              [(ngModel)]="busquedaCliente"
+              (input)="onBusquedaClienteChange()"
+              [disabled]="guardando"
+            />
+            <button 
+              *ngIf="clienteSeleccionado" 
+              class="btn-clear"
+              (click)="limpiarCliente()"
+              type="button"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div class="dropdown" *ngIf="mostrarDropdownClientes && clientesFiltrados.length > 0">
+            <div 
+              class="dropdown-item" 
+              *ngFor="let cliente of clientesFiltrados"
+              (click)="seleccionarCliente(cliente)"
+            >
+              <div class="dropdown-item-title">{{ cliente.nombreCompleto }}</div>
+              <div class="dropdown-item-subtitle">{{ cliente.cedula }} • {{ cliente.email }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="clienteSeleccionado" class="cliente-seleccionado">
+          <div class="info-row">
+            <span class="info-label">Nombre:</span>
+            <span class="info-value">{{ clienteSeleccionado.nombreCompleto }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Cédula:</span>
+            <span class="info-value">{{ clienteSeleccionado.cedula }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Correo:</span>
+            <span class="info-value">{{ clienteSeleccionado.email }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="!clienteSeleccionado" class="info-message">
+          Si no selecciona un cliente, la factura será para consumidor final
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de Agregar Productos -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">🛒 Agregar Productos</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label>Buscar Producto</label>
+          <div class="search-container">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar por nombre o código..."
+              [(ngModel)]="busquedaProducto"
+              (input)="onBusquedaProductoChange()"
+              [disabled]="guardando"
+            />
+          </div>
+
+          <div class="dropdown" *ngIf="mostrarDropdownProductos && productosFiltrados.length > 0">
+            <div 
+              class="dropdown-item" 
+              *ngFor="let producto of productosFiltrados"
+              (click)="agregarProducto(producto)"
+            >
+              <div class="dropdown-item-title">{{ producto.nombre }}</div>
+              <div class="dropdown-item-subtitle">
+                {{ producto.codigo }} • ₡{{ producto.precio | number:'1.2-2' }}
+                <span class="badge-stock" [class.badge-low]="producto.cantidadDisponible < 10">
+                  Stock: {{ producto.cantidadDisponible }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cantidad</label>
+            <input
+              type="number"
+              class="form-control"
+              min="1"
+              [(ngModel)]="cantidadProducto"
+              [disabled]="guardando"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [(ngModel)]="aplicaIVA"
+                [disabled]="guardando"
+              />
+              Aplicar IVA (13%)
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de Detalles -->
+  <div class="card card-full">
+    <div class="card-header">
+      <h2 class="card-title">📋 Detalles de la Factura</h2>
+      <span class="badge-count">{{ detalles.length }} producto(s)</span>
+    </div>
+    <div class="card-body">
+      <div *ngIf="detalles.length === 0" class="empty-state">
+        <div class="empty-icon">📦</div>
+        <p>No hay productos agregados</p>
+        <p class="empty-subtitle">Busca y selecciona productos para agregar a la factura</p>
+      </div>
+
+      <div *ngIf="detalles.length > 0" class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unit.</th>
+              <th>Subtotal</th>
+              <th>IVA</th>
+              <th>Total</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detalle of detalles; let i = index">
+              <td>
+                <div class="producto-info">
+                  <div class="producto-nombre">{{ detalle.productoNombre }}</div>
+                  <span class="badge-iva" *ngIf="detalle.aplicaIVA">IVA incluido</span>
+                </div>
+              </td>
+              <td>
+                <div class="cantidad-controls">
+                  <button 
+                    class="btn-cantidad" 
+                    (click)="modificarCantidad(detalle, -1)"
+                    [disabled]="guardando || detalle.cantidad <= 1"
+                  >
+                    −
+                  </button>
+                  <span class="cantidad-value">{{ detalle.cantidad }}</span>
+                  <button 
+                    class="btn-cantidad" 
+                    (click)="modificarCantidad(detalle, 1)"
+                    [disabled]="guardando"
+                  >
+                    +
+                  </button>
+                </div>
+              </td>
+              <td>₡{{ detalle.precioUnitario | number:'1.2-2' }}</td>
+              <td>₡{{ detalle.subtotal | number:'1.2-2' }}</td>
+              <td>₡{{ detalle.iva | number:'1.2-2' }}</td>
+              <td class="total-cell">₡{{ detalle.total | number:'1.2-2' }}</td>
+              <td>
+                <div class="action-buttons">
+                  <button 
+                    class="btn-icon" 
+                    (click)="toggleIVA(detalle)"
+                    [disabled]="guardando"
+                    title="Alternar IVA"
+                  >
+                    💰
+                  </button>
+                  <button 
+                    class="btn-icon btn-delete" 
+                    (click)="eliminarDetalle(i)"
+                    [disabled]="guardando"
+                    title="Eliminar"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumen de Factura -->
+  <div class="factura-preview" *ngIf="detalles.length > 0">
+    <div class="preview-header">
+      <h3>Resumen de Factura</h3>
+    </div>
+    <div class="preview-body">
+      <div class="preview-row">
+        <span class="preview-label">Subtotal:</span>
+        <span class="preview-value">₡{{ subtotalFactura | number:'1.2-2' }}</span>
+      </div>
+      <div class="preview-row">
+        <span class="preview-label">IVA (13%):</span>
+        <span class="preview-value">₡{{ ivaFactura | number:'1.2-2' }}</span>
+      </div>
+      <div class="preview-row preview-total">
+        <span class="preview-label">Total:</span>
+        <span class="preview-value">₡{{ totalFactura | number:'1.2-2' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

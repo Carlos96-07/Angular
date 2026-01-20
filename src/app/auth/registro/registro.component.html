@@ -1,0 +1,138 @@
+<div class="registro-container">
+  <div class="registro-card">
+    <!-- Header -->
+    <div class="registro-header">
+      <h1 class="titulo">Crear Cuenta Nueva</h1>
+      <p class="subtitulo">Sistema de Gestión Empresarial</p>
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="registro-form">
+      
+      <!-- Mensaje de error general -->
+      <div *ngIf="errorMessage" class="error-alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- Nombre de Usuario -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre de Usuario</mat-label>
+        <input 
+          matInput 
+          formControlName="nombreUsuario"
+          placeholder="Ingresa tu nombre de usuario"
+          [disabled]="isLoading">
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-error *ngIf="registroForm.get('nombreUsuario')?.invalid">
+          {{ getErrorMessage('nombreUsuario') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Nombre Completo -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre Completo</mat-label>
+        <input 
+          matInput 
+          formControlName="nombreCompleto"
+          placeholder="Ingresa tu nombre completo"
+          [disabled]="isLoading">
+        <mat-icon matPrefix>badge</mat-icon>
+        <mat-error *ngIf="registroForm.get('nombreCompleto')?.invalid">
+          {{ getErrorMessage('nombreCompleto') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Email -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Correo Electrónico</mat-label>
+        <input 
+          matInput 
+          type="email"
+          formControlName="email"
+          placeholder="correo@ejemplo.com"
+          [disabled]="isLoading">
+        <mat-icon matPrefix>email</mat-icon>
+        <mat-error *ngIf="registroForm.get('email')?.invalid">
+          {{ getErrorMessage('email') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Contraseña -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Contraseña</mat-label>
+        <input 
+          matInput 
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="contrasena"
+          placeholder="Mínimo 6 caracteres"
+          [disabled]="isLoading">
+        <mat-icon matPrefix>lock</mat-icon>
+        <button 
+          mat-icon-button 
+          matSuffix 
+          type="button"
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="'Ocultar contraseña'">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="registroForm.get('contrasena')?.invalid">
+          {{ getErrorMessage('contrasena') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Confirmar Contraseña -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Confirmar Contraseña</mat-label>
+        <input 
+          matInput 
+          [type]="hideConfirmPassword ? 'password' : 'text'"
+          formControlName="confirmarContrasena"
+          placeholder="Confirma tu contraseña"
+          [disabled]="isLoading">
+        <mat-icon matPrefix>lock</mat-icon>
+        <button 
+          mat-icon-button 
+          matSuffix 
+          type="button"
+          (click)="hideConfirmPassword = !hideConfirmPassword"
+          [attr.aria-label]="'Ocultar contraseña'">
+          <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="registroForm.get('confirmarContrasena')?.invalid">
+          {{ getErrorMessage('confirmarContrasena') }}
+        </mat-error>
+        <mat-error *ngIf="getPasswordMatchError()">
+          {{ getPasswordMatchError() }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Botones -->
+      <div class="button-group">
+        <button 
+          mat-raised-button 
+          color="primary"
+          type="submit"
+          class="submit-button"
+          [disabled]="isLoading">
+          <mat-spinner *ngIf="isLoading" diameter="20" class="button-spinner"></mat-spinner>
+          <span *ngIf="!isLoading">Crear Cuenta</span>
+        </button>
+
+        <button 
+          mat-stroked-button 
+          type="button"
+          class="back-button"
+          (click)="volverAlLogin()"
+          [disabled]="isLoading">
+          Volver al Inicio de Sesión
+        </button>
+      </div>
+    </form>
+
+    <!-- Footer -->
+    <div class="registro-footer">
+      <p>© 2025 POS CLOUD. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</div>

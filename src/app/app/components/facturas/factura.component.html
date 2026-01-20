@@ -1,0 +1,182 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <h1 class="title">Facturas</h1>
+      <p class="subtitle">Gestión de facturas e inventario</p>
+    </div>
+    <button class="btn-primary" (click)="nuevaFactura()">
+      <span class="btn-icon">+</span>
+      Nueva Factura
+    </button>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background: #dbeafe;">
+        📊
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">TOTAL FACTURAS</div>
+        <div class="stat-value">{{ totalFacturas }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: #d1fae5;">
+        📅
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">FACTURAS HOY</div>
+        <div class="stat-value">{{ ventasHoy }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: #fef3c7;">
+        💰
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">TOTAL VENTAS</div>
+        <div class="stat-value">₡{{ totalVentas | number:'1.2-2' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Búsqueda y tabla -->
+  <div class="card">
+    <div class="card-header">
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Buscar por número, cliente, usuario o monto..."
+          [(ngModel)]="terminoBusqueda"
+          (input)="buscar()"
+        />
+        <button 
+          *ngIf="terminoBusqueda" 
+          class="btn-clear-search"
+          (click)="limpiarBusqueda()"
+        >
+          ✕
+        </button>
+      </div>
+      <button class="btn-refresh" (click)="cargarFacturas()" [disabled]="cargando">
+        <span [class.spinning]="cargando">🔄</span>
+      </button>
+    </div>
+
+    <div class="card-body">
+      <!-- Loading -->
+      <div *ngIf="cargando" class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando facturas...</p>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="error && !cargando" class="error-message">
+        <span class="error-icon">⚠️</span>
+        {{ error }}
+      </div>
+
+      <!-- Empty state -->
+      <div *ngIf="!cargando && !error && facturasFiltradas.length === 0 && terminoBusqueda" class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <p>No se encontraron resultados</p>
+        <p class="empty-subtitle">Intenta con otros términos de búsqueda</p>
+      </div>
+
+      <div *ngIf="!cargando && !error && facturas.length === 0" class="empty-state">
+        <div class="empty-icon">📄</div>
+        <p>No hay facturas registradas</p>
+        <p class="empty-subtitle">Crea tu primera factura para comenzar</p>
+        <button class="btn-empty-action" (click)="nuevaFactura()">
+          Nueva Factura
+        </button>
+      </div>
+
+      <!-- Tabla -->
+      <div *ngIf="!cargando && !error && facturasFiltradas.length > 0" class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>NÚMERO</th>
+              <th>CLIENTE</th>
+              <th>USUARIO</th>
+              <th>FECHA</th>
+              <th>SUBTOTAL</th>
+              <th>IVA</th>
+              <th>TOTAL</th>
+              <th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let factura of facturasFiltradas" (click)="verDetalle(factura.facturaId)" class="table-row-clickable">
+              <td>
+                <div class="numero-factura">
+                  <span class="numero-badge">{{ factura.numeroFactura }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="cliente-cell">
+                  <span class="cliente-nombre">{{ factura.cliente }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="usuario-text">{{ factura.usuario }}</span>
+              </td>
+              <td>
+                <span class="fecha-text">{{ formatearFecha(factura.fechaFactura) }}</span>
+              </td>
+              <td>
+                <span class="monto-text">₡{{ factura.subtotal | number:'1.2-2' }}</span>
+              </td>
+              <td>
+                <span class="monto-text">
+                  {{ factura.iva !== null ? ('₡' + (factura.iva | number:'1.2-2')) : '₡0.00' }}
+                </span>
+              </td>
+              <td>
+                <div class="total-cell">
+                  <span class="total-amount">₡{{ factura.total | number:'1.2-2' }}</span>
+                </div>
+              </td>
+              <td>
+                <button 
+                  class="btn-action"
+                  (click)="verDetalle(factura.facturaId); $event.stopPropagation()"
+                  title="Ver factura"
+                >
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="20" height="20" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                  >
+                    <path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="9" y1="13" x2="15" y2="13"/>
+                    <line x1="9" y1="17" x2="15" y2="17"/>
+                  </svg>
+                </button>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Resultados info -->
+      <div *ngIf="!cargando && !error && facturasFiltradas.length > 0" class="results-info">
+        Mostrando {{ facturasFiltradas.length }} de {{ facturas.length }} factura(s)
+      </div>
+    </div>
+  </div>
+</div>

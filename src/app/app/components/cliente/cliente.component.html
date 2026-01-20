@@ -1,0 +1,118 @@
+<div class="clientes-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <h1 class="titulo">Clientes</h1>
+      <p class="subtitulo">Gestión de clientes activos</p>
+    </div>
+    <button class="btn-nuevo" (click)="nuevoCliente()">
+      <i class="icon-plus">+</i>
+      Nuevo Cliente
+    </button>
+  </div>
+
+  <!-- Barra de búsqueda -->
+  <div class="search-bar">
+    <div class="search-input-container">
+      <i class="icon-search">🔍</i>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Buscar por nombre, cédula, email o teléfono..."
+        [value]="busqueda"
+        (input)="busqueda = $any($event.target).value; filtrarClientes()"
+      >
+    </div>
+    <button class="btn-refresh" (click)="cargarClientes()" title="Actualizar">
+      <i class="icon-refresh">↻</i>
+    </button>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div class="alert alert-error" *ngIf="error">
+    <span class="alert-icon">⚠️</span>
+    {{ error }}
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="cargando">
+    <div class="spinner"></div>
+    <p>Cargando clientes...</p>
+  </div>
+
+  <!-- Tabla de clientes -->
+  <div class="table-container" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Cédula</th>
+          <th>Nombre Completo</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Dirección</th>
+          <th class="acciones-header">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of clientesFiltrados" class="table-row">
+          <td class="cedula">{{ cliente.cedula }}</td>
+          <td class="nombre">{{ cliente.nombreCompleto }}</td>
+          <td class="telefono">{{ cliente.telefono }}</td>
+          <td class="email">{{ cliente.email }}</td>
+          <td class="direccion">{{ cliente.direccion }}</td>
+          <td class="acciones">
+            <button 
+              class="btn-icon btn-editar" 
+              (click)="editarCliente(cliente)"
+              title="Editar">
+              <i class="icon-edit">✏️</i>
+            </button>
+            <button 
+              class="btn-icon btn-eliminar" 
+              (click)="confirmarEliminar(cliente)"
+              title="Eliminar">
+              <i class="icon-delete">🗑️</i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="clientesFiltrados.length === 0" class="empty-row">
+          <td colspan="6" class="empty-message">
+            <div class="empty-state">
+              <i class="icon-empty">📋</i>
+              <p>No se encontraron clientes</p>
+              <button class="btn-nuevo-empty" (click)="nuevoCliente()">
+                Agregar primer cliente
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal de confirmación de eliminación -->
+  <div class="modal-overlay" *ngIf="mostrarModalEliminar" (click)="cancelarEliminar()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Confirmar Eliminación</h3>
+        <button class="btn-close" (click)="cancelarEliminar()">×</button>
+      </div>
+      <div class="modal-body">
+        <p>¿Está seguro que desea eliminar al cliente?</p>
+        <div class="cliente-info" *ngIf="clienteSeleccionado">
+          <p><strong>Nombre:</strong> {{ clienteSeleccionado.nombreCompleto }}</p>
+          <p><strong>Cédula:</strong> {{ clienteSeleccionado.cedula }}</p>
+        </div>
+        <p class="warning-text">Esta acción no se puede deshacer.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="cancelarEliminar()">
+          Cancelar
+        </button>
+        <button class="btn-confirmar-eliminar" (click)="eliminarCliente()">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,395 @@
+.container {
+  padding: 32px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.btn-back,
+.btn-print {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-back {
+  background: white;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-back:hover {
+  background: #f7fafc;
+}
+
+.btn-print {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-print:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Loading */
+.loading-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #718096;
+  background: white;
+  border-radius: 12px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 16px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Error */
+.error-message {
+  background: #fff5f5;
+  border: 1px solid #fc8181;
+  color: #c53030;
+  padding: 16px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-icon {
+  font-size: 20px;
+}
+
+/* Factura Container */
+.factura-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 48px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header de Factura */
+.factura-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 32px;
+  border-bottom: 3px solid #667eea;
+  margin-bottom: 32px;
+}
+
+.empresa-info {
+  flex: 1;
+}
+
+.empresa-nombre {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 4px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.empresa-slogan {
+  color: #718096;
+  font-size: 14px;
+  margin: 0;
+}
+
+.factura-numero {
+  text-align: right;
+}
+
+.numero-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #718096;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.numero-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #667eea;
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.info-section {
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.info-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a5568;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-content {
+  color: #2d3748;
+}
+
+.info-text {
+  margin: 4px 0;
+  font-size: 16px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.info-label {
+  color: #718096;
+  font-size: 14px;
+}
+
+.info-value {
+  color: #2d3748;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* Productos Section */
+.productos-section {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 16px 0;
+}
+
+.productos-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.productos-table thead {
+  background: #f7fafc;
+}
+
+.productos-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.productos-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f7fafc;
+  font-size: 14px;
+  color: #2d3748;
+}
+
+.col-producto {
+  width: 35%;
+}
+
+.col-cantidad,
+.col-precio,
+.col-subtotal,
+.col-iva,
+.col-total {
+  width: 13%;
+}
+
+.producto-nombre {
+  font-weight: 500;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.total-detalle {
+  font-weight: 600;
+  color: #667eea;
+}
+
+/* Totales Section */
+.totales-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 32px;
+  padding-top: 16px;
+  border-top: 2px solid #e2e8f0;
+}
+
+.totales-content {
+  min-width: 350px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f7fafc;
+}
+
+.total-label {
+  font-size: 15px;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.total-value {
+  font-size: 15px;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.total-final {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin-top: 8px;
+  border-radius: 8px;
+  border-bottom: none;
+}
+
+.total-final .total-label,
+.total-final .total-value {
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Footer */
+.factura-footer {
+  text-align: center;
+  padding-top: 32px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.footer-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 4px 0;
+}
+
+.footer-subtext {
+  font-size: 13px;
+  color: #a0aec0;
+  margin: 0;
+}
+
+/* Print Styles */
+@media print {
+  .container {
+    padding: 0;
+    background: white;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .factura-container {
+    box-shadow: none;
+    padding: 20px;
+  }
+
+  .factura-header {
+    page-break-after: avoid;
+  }
+
+  .productos-section {
+    page-break-inside: avoid;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .factura-container {
+    padding: 24px 16px;
+  }
+
+  .factura-header {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .factura-numero {
+    text-align: left;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .productos-table {
+    font-size: 12px;
+  }
+
+  .productos-table th,
+  .productos-table td {
+    padding: 8px;
+  }
+
+  .totales-content {
+    min-width: 100%;
+  }
+
+  .total-row {
+    padding: 10px;
+  }
+}

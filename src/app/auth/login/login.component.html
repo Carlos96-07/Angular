@@ -1,0 +1,152 @@
+<div class="login-wrapper">
+  <!-- Panel Izquierdo - Branding -->
+  <div class="login-branding">
+    <div class="branding-content">
+      <!-- Logo -->
+      <div class="logo-section">
+        <div class="logo-icon">
+          <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M25 5C13.954 5 5 13.954 5 25C5 36.046 13.954 45 25 45C36.046 45 45 36.046 45 25C45 13.954 36.046 5 25 5Z" 
+                  fill="#60A5FA"/>
+            <path d="M25 15C19.477 15 15 19.477 15 25C15 30.523 19.477 35 25 35C30.523 35 35 30.523 35 25C35 19.477 30.523 15 25 15Z" 
+                  fill="#93C5FD"/>
+          </svg>
+        </div>
+        <h1 class="brand-name">POS CLOUD</h1>
+      </div>
+
+      <!-- Descripción -->
+      <div class="branding-info">
+        <h2>Sistema de Gestión Empresarial</h2>
+        <p>Administra tu negocio de forma eficiente y segura desde cualquier lugar.</p>
+      </div>
+
+      <!-- Features -->
+      <div class="features-list">
+        <div class="feature-item">
+          <mat-icon>cloud_done</mat-icon>
+          <span>100% en la nube</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>security</mat-icon>
+          <span>Seguridad garantizada</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>devices</mat-icon>
+          <span>Acceso desde cualquier dispositivo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel Derecho - Formulario -->
+  <div class="login-form-panel">
+    <div class="form-container">
+      <!-- Header del formulario -->
+      <div class="form-header">
+        <h2>Iniciar Sesión</h2>
+        <p>Ingresa tus credenciales para acceder al sistema</p>
+      </div>
+
+      <!-- Formulario -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        
+        <!-- Campo Nombre de Usuario -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre de Usuario</mat-label>
+          <input 
+            matInput 
+            formControlName="nombreUsuario"
+            placeholder="Ingresa tu usuario"
+            autocomplete="username"
+            [readonly]="isLoading">
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="nombreUsuario?.invalid && nombreUsuario?.touched">
+            {{ getErrorMessage('nombreUsuario') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Campo Contraseña -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input 
+            matInput 
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="contrasena"
+            placeholder="Ingresa tu contraseña"
+            autocomplete="current-password"
+            [readonly]="isLoading">
+          <mat-icon matPrefix>lock</mat-icon>
+          <button 
+            mat-icon-button 
+            matSuffix 
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [disabled]="isLoading"
+            tabindex="-1">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="contrasena?.invalid && contrasena?.touched">
+            {{ getErrorMessage('contrasena') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Opciones adicionales -->
+        <div class="form-options">
+          <mat-checkbox color="primary" class="remember-me">
+            Recordarme
+          </mat-checkbox>
+          <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- Botón de Login -->
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit"
+          class="login-button"
+          [disabled]="isLoading">
+          <span *ngIf="!isLoading" class="button-content">
+            <mat-icon>login</mat-icon>
+            Iniciar Sesión
+          </span>
+          <mat-spinner 
+            *ngIf="isLoading" 
+            diameter="24" 
+            class="button-spinner">
+          </mat-spinner>
+        </button>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="error-alert">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <!-- Divider -->
+        <div class="form-divider">
+          <span>o</span>
+        </div>
+
+        <!-- Registro -->
+        <div class="register-section">
+          <p class="register-text">
+            ¿No tienes una cuenta?
+          </p>
+          <button 
+            mat-stroked-button 
+            type="button"
+            class="register-button"
+            [disabled]="isLoading">
+            Crear cuenta nueva
+          </button>
+        </div>
+      </form>
+
+      <!-- Footer -->
+      <div class="form-footer">
+        <p>&copy; 2025 POS CLOUD. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </div>
+</div>

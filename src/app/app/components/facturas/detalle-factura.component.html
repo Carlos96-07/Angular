@@ -1,0 +1,118 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header no-print">
+    <button class="btn-back" (click)="volver()">
+      ← Volver
+    </button>
+    <button class="btn-print" (click)="imprimir()">
+      🖨️ Imprimir
+    </button>
+  </div>
+
+  <!-- Spinner de carga -->
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando factura...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !cargando" class="error-message">
+    <span class="error-icon">⚠️</span>
+    {{ error }}
+  </div>
+
+  <!-- Factura -->
+  <div *ngIf="factura && !cargando" class="factura-container">
+    
+    <!-- Encabezado de la factura -->
+    <div class="factura-header">
+      <div class="empresa-info">
+        <h1 class="empresa-nombre">POS CLOUD</h1>
+        <p class="empresa-slogan">Sistema de Punto de Venta</p>
+      </div>
+      <div class="factura-numero">
+        <div class="numero-label">FACTURA</div>
+        <div class="numero-value">{{ factura.encabezado.numeroFactura }}</div>
+      </div>
+    </div>
+
+    <!-- Información del cliente y fecha -->
+    <div class="info-grid">
+      <div class="info-section">
+        <h3 class="info-title">Cliente</h3>
+        <div class="info-content">
+          <p class="info-text">
+            <strong>{{ factura.encabezado.cliente }}</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h3 class="info-title">Detalles de Factura</h3>
+        <div class="info-content">
+          <div class="info-row">
+            <span class="info-label">Fecha:</span>
+            <span class="info-value">{{ formatearFecha(factura.encabezado.fechaFactura) }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Atendido por:</span>
+            <span class="info-value">{{ factura.encabezado.usuario }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de productos -->
+    <div class="productos-section">
+      <h3 class="section-title">Productos</h3>
+      <table class="productos-table">
+        <thead>
+          <tr>
+            <th class="col-producto">Producto</th>
+            <th class="col-cantidad">Cant.</th>
+            <th class="col-precio">Precio Unit.</th>
+            <th class="col-subtotal">Subtotal</th>
+            <th class="col-iva">IVA</th>
+            <th class="col-total">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let detalle of factura.detalles">
+            <td class="producto-nombre">{{ detalle.producto }}</td>
+            <td class="text-center">{{ detalle.cantidad }}</td>
+            <td class="text-right">₡{{ detalle.precioUnitario | number:'1.2-2' }}</td>
+            <td class="text-right">₡{{ detalle.subtotal | number:'1.2-2' }}</td>
+            <td class="text-right">₡{{ detalle.iva | number:'1.2-2' }}</td>
+            <td class="text-right total-detalle">₡{{ detalle.total | number:'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Totales -->
+    <div class="totales-section">
+      <div class="totales-content">
+        <div class="total-row">
+          <span class="total-label">Subtotal:</span>
+          <span class="total-value">₡{{ factura.encabezado.subtotal | number:'1.2-2' }}</span>
+        </div>
+        <div class="total-row">
+          <span class="total-label">IVA (13%):</span>
+          <span class="total-value">
+            {{ factura.encabezado.iva !== null ? ('₡' + (factura.encabezado.iva | number:'1.2-2')) : '₡0.00' }}
+          </span>
+        </div>
+        <div class="total-row total-final">
+          <span class="total-label">Total:</span>
+          <span class="total-value">₡{{ factura.encabezado.total | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="factura-footer">
+      <p class="footer-text">Gracias por su compra</p>
+      <p class="footer-subtext">Esta es una representación electrónica de su factura</p>
+    </div>
+  </div>
+</div>
